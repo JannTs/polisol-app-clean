@@ -4,21 +4,18 @@ export default async function handler(req, res) {
   const storeId = '10995149';
   const baseUrl = `https://store${storeId}.company.site`;
 
-  // 🔧 Правильный SEO-friendly путь без #!
+  // SEO-friendly карточка товара
   let targetUrl = baseUrl;
   if (productId) {
-    if (slug) {
-      targetUrl = `${baseUrl}/${slug}-p${productId}`;
-    } else {
-      targetUrl = `${baseUrl}/p${productId}`;
-    }
+    const slugPart = slug || 'product';
+    targetUrl = `${baseUrl}/${slugPart}-p${productId}`;
   }
 
   try {
     const response = await fetch(targetUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; polisol-proxy/1.0)',
-      },
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+      }
     });
 
     if (!response.ok) {
@@ -27,7 +24,7 @@ export default async function handler(req, res) {
 
     let html = await response.text();
 
-    // Удалить мета-заголовок, мешающий iFrame
+    // Удалим X-Frame-Options
     html = html.replace(
       /<meta[^>]*http-equiv=["']X-Frame-Options["'][^>]*>/gi,
       ''
