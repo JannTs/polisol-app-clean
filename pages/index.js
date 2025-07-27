@@ -1,0 +1,1 @@
+export default function Home() { return 'Ecwid Embed Proxy is active.' }
